@@ -42,17 +42,23 @@
      ```
   - page.map() 으로 dto 변환
      ```java
-      Page<MemberDto> map = page.map(m -> new MemberDto(m.getId(), m.getUsername(), null));
+       Page<MemberDto> map = page.map(m -> new MemberDto(m.getId(), m.getUsername(), null));
      ```
 - 벌크성 수정 쿼리
   - @Modifying로 update문 명시
   - 벌크 연산 실행 후 다른 조회가 있으면 clearAutomatically = true 옵션으로 영속성 컨텍스트 클리어
     ```java
-    @Modifying(clearAutomatically = true)
-    @Query("update Member m set m.age = m.age + 1 where m.age >= :age")
-    int bulkAgePlus(@Param("age") int age);
+      @Modifying(clearAutomatically = true)
+      @Query("update Member m set m.age = m.age + 1 where m.age >= :age")
+      int bulkAgePlus(@Param("age") int age);
     ```
 - @EntityGraph
+  - 간단한 fetch join의 경우 사용 (복잡할 땐 jpql fetch join 사용)
+  ```java
+    @EntityGraph(attributePaths = {"team"})
+    @Query("select m from Member m")
+    List<Member> findMemberEntityGraph();
+  ```
 - JPA Hint & Lock
 
 ### 섹션 6. 확장 기능
