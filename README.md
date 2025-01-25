@@ -156,6 +156,13 @@
       }
     ```
 - Web 확장 - 도메인 클래스 컨버터
+  - 간단한 경우 조회용으로만 사용
+  ```java
+    @GetMapping("/members2/{id}")
+    public String findMember2(@PathVariable("id") Member member) {
+      return member.getUsername();
+    }
+  ```
 - Web 확장 - 페이징과 정렬
 ---
 ### 섹션 7. 스프링 데이터 JPA 분석
