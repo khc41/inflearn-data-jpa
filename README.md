@@ -29,15 +29,15 @@
 - 반환 타입
 - 순수 JPA 페이징과 정렬
   ```java
-  List<Member> findListByUsername(String username); // 컬렉션
-  Member findMemberByUsername(String username); // 단건
-  Optional<Member> findOptionalByUsername(String username); // 단건 Optional
+    List<Member> findListByUsername(String username); // 컬렉션
+    Member findMemberByUsername(String username); // 단건
+    Optional<Member> findOptionalByUsername(String username); // 단건 Optional
   ```
 - 스프링 데이터 JPA 페이징과 정렬
   - 슬라이스 (limit + 1 가져와서 앱에서 간단한 페이징 처리)
   - count query 분리 (join 등도 같이 Total count 쿼리에 걸리므로 분리)
      ```java 
-     @Query(value = "select m from Member m left join m.team t",
+       @Query(value = "select m from Member m left join m.team t",
         countQuery = "select count(m.username) from Member m") 
      ```
   - page.map() 으로 dto 변환
@@ -60,6 +60,16 @@
       List<Member> findMemberEntityGraph();
     ```
 - JPA Hint & Lock
+  - JPA Hint
+    - 진짜 성능 최적화가 중요한 것에만 넣는다. (성능 테스트 해보고 넣는 것 권장)
+    - 진짜 조회 성능이 낮으면 캐시를 사용해야 한다.
+      ```java
+        @QueryHints(value = @QueryHint(name = "org.hibernate.readOnly", value = "true"))
+        Member findReadOnlyByUsername(String username);
+      ```
+  - Lock
+    - 실시간 트래픽이 많은 서비스에서는 Lock을 걸면 안된다.
+    - 걸려면 Optimistic Lock이나 다른 방법으로 해결하는 것을 추천
 
 ### 섹션 6. 확장 기능
 - 사용자 정의 리포지토리 구현
