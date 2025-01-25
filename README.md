@@ -54,11 +54,11 @@
     ```
 - @EntityGraph
   - 간단한 fetch join의 경우 사용 (복잡할 땐 jpql fetch join 사용)
-  ```java
-    @EntityGraph(attributePaths = {"team"})
-    @Query("select m from Member m")
-    List<Member> findMemberEntityGraph();
-  ```
+    ```java
+      @EntityGraph(attributePaths = {"team"})
+      @Query("select m from Member m")
+      List<Member> findMemberEntityGraph();
+    ```
 - JPA Hint & Lock
 
 ### 섹션 6. 확장 기능
