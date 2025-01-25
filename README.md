@@ -78,6 +78,83 @@
   - 항상 사용하는 것은 아님
     - 핵심 비즈니스 로직과 화면에 맞춘 쿼리를 분리하는 편이 좋다.
 - Auditing
+  - 순수 JPA
+    ```java
+      @MappedSuperclass
+      public class JpaBaseEntity {
+  
+        @Column(updatable = false)
+        private LocalDateTime createdDate;
+        private LocalDateTime updatedDate;
+  
+        @PrePersist
+        public void prePersist() {
+            LocalDateTime now = LocalDateTime.now();
+            createdDate = now;
+            updatedDate = now;
+        }
+  
+        @PreUpdate
+        public void preUpdate() {
+            updatedDate = LocalDateTime.now();
+        }
+      }
+    ```
+  - 스프링 데이터 JPA
+    ```java
+      @EntityListeners(AuditingEntityListener.class)
+      @Getter
+      @MappedSuperclass
+      public class BaseEntity {
+
+          @CreatedDate
+          @Column(updatable = false)
+          private LocalDateTime createdDate;
+          @LastModifiedDate
+          private LocalDateTime lastModifiedDate;
+
+          @CreatedBy
+          @Column(updatable = false)
+          private String createdBy;
+
+          @LastModifiedBy
+          private String lastModifiedBy;
+      }
+    ```
+      ```java
+        @Bean
+        public AuditorAware<String> auditorProvider() {
+          //SecurityContextHolder 등 에서 세션 정보 가져와서 사용
+          //createdBy, lastModifiedBy 정보를 채워줌
+          return () -> Optional.of(UUID.randomUUID().toString());
+        }
+      ```
+    - Date 관련 Column의 경우는 모든 테이블에서 사용하지만, By 관련 Column은 사용 안하는 경우도 있기에 아래와 같이 분리해서 사용 권장
+    ```java
+      @EntityListeners(AuditingEntityListener.class)
+      @Getter
+      @MappedSuperclass
+      public class BaseTimeEntity {
+        @CreatedDate
+        @Column(updatable = false)
+        private LocalDateTime createdDate;
+        @LastModifiedDate
+        private LocalDateTime lastModifiedDate;
+      }
+    
+      @EntityListeners(AuditingEntityListener.class)
+      @Getter
+      @MappedSuperclass
+      public class BaseEntity extends BaseTimeEntity {
+
+        @CreatedBy
+        @Column(updatable = false)
+        private String createdBy;
+
+        @LastModifiedBy
+        private String lastModifiedBy;
+      }
+    ```
 - Web 확장 - 도메인 클래스 컨버터
 - Web 확장 - 페이징과 정렬
 ---
