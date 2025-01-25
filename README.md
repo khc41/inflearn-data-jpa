@@ -164,6 +164,30 @@
     }
   ```
 - Web 확장 - 페이징과 정렬
+  ```java
+    @GetMapping("/members")
+    public Page<MemberDto> list(@PageableDefault(size = 5, sort = "username") Pageable pageable) {
+      // entity 노출하지 않게 page.map을 사용해 dto로 반환
+      return memberRepository.findAll(pageable)
+          .map(m ->new MemberDto(m.getId(), m.getUsername(), null));
+    }
+  ```
+  - /members?page=1&size=3&sort=id,desc&sort=username,desc
+    - 위와 같이 요청을 보내면 자동으로 페이징 처리 가능
+  - default page setting 은 application.yml 파일에 아래와 같이 넣거나 @PageableDefault 어노테이션 사용
+    ```yaml
+      spring:
+        data:
+          web:
+            pageable:
+              default-page-size: 10
+              max-page-size: 2000
+    ```
+  - Page를 1부터 시작하려면?
+    - 별도의 Paging 클래스 정의 후 사용
+    - `spring.data.web.pageable.one-indexed-parameters=true` 사용 
+      - Page 객체 내 파라미터가 안맞아서 권장 x
+
 ---
 ### 섹션 7. 스프링 데이터 JPA 분석
 - 스프링 데이터 JPA 구현체 분석
