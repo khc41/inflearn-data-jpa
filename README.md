@@ -28,8 +28,30 @@
 - 파라미터 바인딩
 - 반환 타입
 - 순수 JPA 페이징과 정렬
+  ```java
+  List<Member> findListByUsername(String username); // 컬렉션
+  Member findMemberByUsername(String username); // 단건
+  Optional<Member> findOptionalByUsername(String username); // 단건 Optional
+  ```
 - 스프링 데이터 JPA 페이징과 정렬
+  - 슬라이스 (limit + 1 가져와서 앱에서 간단한 페이징 처리)
+  - count query 분리 (join 등도 같이 Total count 쿼리에 걸리므로 분리)
+     ```java 
+     @Query(value = "select m from Member m left join m.team t",
+        countQuery = "select count(m.username) from Member m") 
+     ```
+  - page.map() 으로 dto 변환
+     ```java
+      Page<MemberDto> map = page.map(m -> new MemberDto(m.getId(), m.getUsername(), null));
+     ```
 - 벌크성 수정 쿼리
+  - @Modifying로 update문 명시
+  - 벌크 연산 실행 후 다른 조회가 있으면 clearAutomatically = true 옵션으로 영속성 컨텍스트 클리어
+    ```java
+    @Modifying(clearAutomatically = true)
+    @Query("update Member m set m.age = m.age + 1 where m.age >= :age")
+    int bulkAgePlus(@Param("age") int age);
+    ```
 - @EntityGraph
 - JPA Hint & Lock
 
