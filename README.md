@@ -208,5 +208,8 @@
 - Specifications (명세)
   - JPA Criteria를 사용하므로 실무 사용 x
 - Query By Example
+  - Example 만들어서 select 할때 파라미터로 사용 (객체로 탐색)
+  - primitive 타입인 경우 ExampleMatcher의 withIgnorePaths 사용해서 무시해줘야함
+  - outer join 사용 안되는 이슈가 있어 실무 사용 고려해봐야함 
 - Projections
 - 네이티브 쿼리
