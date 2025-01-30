@@ -191,6 +191,13 @@
 ---
 ### 섹션 7. 스프링 데이터 JPA 분석
 - 스프링 데이터 JPA 구현체 분석
+  - @Repository
+    - JPA 예외를 스프링이 추상화한 예외로 변환
+  - @Transactional은 Spring Data Jpa 내부에서 자동으로 적용
+  - @Transactional(readOnly = true) 는 내부적으로 flush를 생략해서 약간의 성능 향상 가능
+  - save() 메서드
+    - 새로운 entity면 persist, 새로운 entity가 아니면 merge 
+    - merge는 값이 전부 대체되기 때문에 되도록이면 dirty checking 사용해서 update
 - 새로운 엔티티를 구별하는 방법
 ---
 ### 섹션 8. 나머지 기능들
