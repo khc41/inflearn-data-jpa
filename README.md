@@ -199,6 +199,10 @@
     - 새로운 entity면 persist, 새로운 entity가 아니면 merge 
     - merge는 값이 전부 대체되기 때문에 되도록이면 dirty checking 사용해서 update
 - 새로운 엔티티를 구별하는 방법
+  - id가 GeneratedValue가 아닌 경우 내부 코드 상 isNew()는 false로 되어 merge() 동작
+    - select 실행 후 update나 insert 실행
+    - Persistable을 상속 받아 해결 가능
+      - isNew() 메소드를 return createdDate == null 로 반환하면 새로운 엔티티인지 판단 가능
 ---
 ### 섹션 8. 나머지 기능들
 - Specifications (명세)
