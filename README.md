@@ -212,4 +212,7 @@
   - primitive 타입인 경우 ExampleMatcher의 withIgnorePaths 사용해서 무시해줘야함
   - outer join 사용 안되는 이슈가 있어 실무 사용 고려해봐야함 
 - Projections
+  - 프로젝션 대상이 root 엔티티면 JPQA select문 최적화 가능 
+  - root가 아닌 경우 모든 필드를 select 하므로 최적화가 안된다.
+  - dto를 사용하는 경우 파라미터 이름 인식문제로 gradle로 빌드해야 한다.
 - 네이티브 쿼리
