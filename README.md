@@ -206,6 +206,7 @@
 ---
 ### 섹션 8. 나머지 기능들
 - Specifications (명세)
+  - JPA Criteria를 사용하므로 실무 사용 x
 - Query By Example
 - Projections
 - 네이티브 쿼리
